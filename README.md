@@ -1,5 +1,5 @@
 # Sunshine
 
-日照时间计算器
+房屋日照时间计算器
 
-Daylight Calculator
+House Daylight Calculator
