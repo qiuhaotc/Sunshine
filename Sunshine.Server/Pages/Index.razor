@@ -1,9 +1,53 @@
 ﻿@page "/"
+@using System.Diagnostics.CodeAnalysis;
+@using Microsoft.Extensions.Localization;
+@inject SunAngleHelper AngleHelper;
+@inject ILogger<Index> Logger;
 
 <PageTitle>房屋日照时间计算器</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>房屋日照时间计算器</h1>
+<GroupBox Title="房屋日照时间计算器" style="margin-top: 1.5rem;">
+    <ValidateForm Model="@Model" OnValidSubmit="@OnValidSubmit">
+        <EditorForm Model="@Model">
+            <FieldItems>
+                <EditorItem @bind-Field="@context.CurrentDateTime">
+                    <EditTemplate Context="value">
+                        <DateTimePicker @bind-Value="context.CurrentDateTime" ShowLabel="true" ViewMode="DatePickerViewMode.DateTime" Format="yyyy-MM-dd HH:mm:ss" />
+                    </EditTemplate>
+                </EditorItem>
+            </FieldItems>
+            <Buttons>
+                <Button ButtonType="@ButtonType.Submit" IsAsync="true" Icon="fa-solid fa-floppy-disk" Text="提交" />
+            </Buttons>
+        </EditorForm>
+    </ValidateForm>
+</GroupBox>
 
-Welcome to your new app.
+<GroupBox Title="结果" style="margin-top: 1.5rem;">
+    <EditorForm Model="@ResultModel">
+    </EditorForm>
+</GroupBox>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+@code {
+    HouseDaylightViewModel Model { get; set; } = new HouseDaylightViewModel();
+    HouseDaylightResultViewModel ResultModel { get; set; } = new HouseDaylightResultViewModel();
+
+    /// <summary>
+    /// OnInitialized
+    /// </summary>
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
+
+    Task OnValidSubmit(EditContext context)
+    {
+        var model = (HouseDaylightViewModel)context.Model;
+        var angle = AngleHelper.GetSunAngle(model.Latitude, model.Longitude, model.CurrentDateTime ?? DateTime.Now);
+        ResultModel.Altitude = angle.Altitude;
+        ResultModel.Azimuth = angle.Azimuth;
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+}

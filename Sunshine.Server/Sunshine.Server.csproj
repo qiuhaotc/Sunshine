@@ -9,7 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BootstrapBlazor" Version="7.6.2" />
+    <PackageReference Include="BootstrapBlazor.FontAwesome" Version="7.4.2" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.2" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="5.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sunshine.Business\Sunshine.Business.csproj" />
   </ItemGroup>
 
 </Project>

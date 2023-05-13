@@ -1,13 +1,15 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using Sunshine.Server.Data;
+using NLog.Web;
+using Sunshine.Business;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseNLog();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
+builder.Services.AddSingleton<SunAngleHelper>();
+
+builder.Services.AddBootstrapBlazor();
 
 var app = builder.Build();
 

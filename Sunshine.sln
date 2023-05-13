@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sunshine.Business", "Sunshine.Business\Sunshine.Business.csproj", "{6039EB76-1EE1-4473-823B-2FDF181FAB73}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,6 +24,10 @@ Global
 		{49F07E78-1393-42D3-A40D-4E6FCED9563F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49F07E78-1393-42D3-A40D-4E6FCED9563F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49F07E78-1393-42D3-A40D-4E6FCED9563F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6039EB76-1EE1-4473-823B-2FDF181FAB73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6039EB76-1EE1-4473-823B-2FDF181FAB73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6039EB76-1EE1-4473-823B-2FDF181FAB73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6039EB76-1EE1-4473-823B-2FDF181FAB73}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
