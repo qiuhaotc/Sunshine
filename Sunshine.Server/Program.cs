@@ -8,6 +8,7 @@ builder.Host.UseNLog();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<SunAngleHelper>();
+builder.Services.AddSingleton<DaylightCalculater>();
 
 builder.Services.AddBootstrapBlazor();
 

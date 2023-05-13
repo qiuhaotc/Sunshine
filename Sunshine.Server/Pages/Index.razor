@@ -2,6 +2,7 @@
 @using System.Diagnostics.CodeAnalysis;
 @using Microsoft.Extensions.Localization;
 @inject SunAngleHelper AngleHelper;
+@inject DaylightCalculater DaylightCalculater;
 @inject ILogger<Index> Logger;
 
 <PageTitle>房屋日照时间计算器</PageTitle>
@@ -18,20 +19,20 @@
                 </EditorItem>
             </FieldItems>
             <Buttons>
-                <Button ButtonType="@ButtonType.Submit" IsAsync="true" Icon="fa-solid fa-floppy-disk" Text="提交" />
+                <Button ButtonType="@ButtonType.Submit" IsAsync="true" Icon="fa-solid fa-floppy-disk" Text="计算" />
             </Buttons>
         </EditorForm>
     </ValidateForm>
 </GroupBox>
 
 <GroupBox Title="结果" style="margin-top: 1.5rem;">
-    <EditorForm Model="@ResultModel">
+    <EditorForm Model="@Sunshine">
     </EditorForm>
 </GroupBox>
 
 @code {
     HouseDaylightViewModel Model { get; set; } = new HouseDaylightViewModel();
-    HouseDaylightResultViewModel ResultModel { get; set; } = new HouseDaylightResultViewModel();
+    SunshineViewInfo Sunshine { get; set; } = new SunshineViewInfo();
 
     /// <summary>
     /// OnInitialized
@@ -44,10 +45,10 @@
     Task OnValidSubmit(EditContext context)
     {
         var model = (HouseDaylightViewModel)context.Model;
-        var angle = AngleHelper.GetSunAngle(model.Latitude, model.Longitude, model.CurrentDateTime ?? DateTime.Now);
-        ResultModel.Altitude = angle.Altitude;
-        ResultModel.Azimuth = angle.Azimuth;
+        Sunshine.SetSunshineInfo(DaylightCalculater.GetSunshineInfo(model.GetHouseDaylightModel()));
+        Logger.LogInformation(Sunshine.TimeSpanString);
         StateHasChanged();
+
         return Task.CompletedTask;
     }
 }
