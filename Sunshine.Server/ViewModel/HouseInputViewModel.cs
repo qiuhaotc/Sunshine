@@ -55,7 +55,7 @@ public class HouseInputViewModel
     /// 前面遮挡的总楼层数(无需减去当前楼层数)
     /// </summary>
     [Required(ErrorMessage = ErrorMessageForRequired)]
-    [Range(0, 50, ErrorMessage = ErrorMessageForRange)]
+    [Range(1, 1000, ErrorMessage = ErrorMessageForRange)]
     [AutoGenerateColumn(Order = 14)]
     [Display(Name = "前面遮挡的总楼层数(无需减去当前楼层数)")]
     public int BlockLevel { get; set; } = 18;

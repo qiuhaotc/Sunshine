@@ -62,6 +62,15 @@ public class HouseSunshineViewModel
     [Display(Name = "大寒 1月20日")]
     public string GreatCold { get; set; } = string.Empty;
 
+    [AutoGenerateColumn(Ignore = true)]
+    public string ValidateResult { get; set; } = string.Empty;
+
+    [AutoGenerateColumn(Ignore = true)]
+    public Color ValidateResultColor { get; set; }
+
+    [AutoGenerateColumn(Ignore = true)]
+    public bool ValidateResultVisible { get; set; }
+
     public void SetSunshineInfo(HouseSunshineModel houseSunshineModel)
     {
         TotalSunshineTime = $"{houseSunshineModel.TotalSunshineTime.TotalHours:F3}小时";
@@ -73,5 +82,18 @@ public class HouseSunshineViewModel
         GreatCold = $"{houseSunshineModel.GreatCold.TotalHours:F3}小时";
 
         SunshineTimePercent = $"{(houseSunshineModel.TotalSunshineTime.TotalHours == 0 ? 1d : houseSunshineModel.ExactSunshineTime.TotalHours / houseSunshineModel.TotalSunshineTime.TotalHours) * 100:F3}%";
+
+        ValidateResultVisible = true;
+
+        if (houseSunshineModel.GreatCold >= TimeSpan.FromHours(2) && houseSunshineModel.WinterSolstice >= TimeSpan.FromHours(1))
+        {
+            ValidateResult = "房屋日照时间在大寒大于两小时, 冬至大于一小时";
+            ValidateResultColor = Color.Success;
+        }
+        else
+        {
+            ValidateResult = "房屋日照时间在大寒小于两小时或冬至小于一小时";
+            ValidateResultColor = Color.Danger;
+        }
     }
 }
