@@ -8,20 +8,22 @@
 <PageTitle>房屋日照时间计算器</PageTitle>
 
 <h1>房屋日照时间计算器</h1>
-<GroupBox Title="参数" style="margin-top: 1.5rem;">
-    <ValidateForm Model="@Model" OnValidSubmit="@OnValidSubmit">
-        <EditorForm Model="@Model">
-            <Buttons>
-                <Button ButtonType="@ButtonType.Submit" IsAsync="true" Icon="fa-solid fa-calculator" Text="计算日照时间" IsBlock="true" Size="Size.Large" />
-            </Buttons>
-        </EditorForm>
-    </ValidateForm>
-</GroupBox>
+<Row ItemsPerRow="ItemsPerRow.Two">
+    <GroupBox Title="参数" style="margin-top: 1.5rem;">
+        <ValidateForm Model="@Model" OnValidSubmit="@OnValidSubmit">
+            <EditorForm Model="@Model">
+                <Buttons>
+                    <Button ButtonType="@ButtonType.Submit" IsAsync="true" Icon="fa-solid fa-calculator" Text="计算日照时间" IsBlock="true" Size="Size.Large" />
+                </Buttons>
+            </EditorForm>
+        </ValidateForm>
+    </GroupBox>
 
-<GroupBox Title="结果" style="margin-top: 1.5rem;">
-    <EditorForm Model="@Sunshine">
-    </EditorForm>
-</GroupBox>
+    <GroupBox Title="结果" style="margin-top: 1.5rem;">
+        <EditorForm Model="@Sunshine">
+        </EditorForm>
+    </GroupBox>
+</Row>
 
 @code {
     HouseDaylightViewModel Model { get; set; } = new HouseDaylightViewModel();

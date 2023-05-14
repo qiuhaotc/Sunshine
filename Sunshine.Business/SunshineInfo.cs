@@ -8,4 +8,5 @@ public class SunshineInfo
     public TimeSpan AutumnalEquinox { get; internal set; }
     public TimeSpan WinterSolstice { get; internal set; }
     public TimeSpan TotalSunshineTime { get; internal set; }
+    public TimeSpan GreatCold { get; internal set; }
 }
