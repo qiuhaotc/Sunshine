@@ -39,32 +39,33 @@ public class SunshineCalculater
         {
             var currentLocalDate = currentDateTimeUtc.AddHours(houseInputModel.TimeZone);
             var heightAngle = SunAngleHelper.GetSunAngle(houseInputModel.Latitude, houseInputModel.Longitude, currentDateTimeUtc);
-            if (heightAngle.Altitude >= angle)
-            {
-                exactSunshineTime = exactSunshineTime.Add(currentTimeSpan);
-
-                switch (currentLocalDate.Month)
-                {
-                    case 1 when currentLocalDate.Day == 20:
-                        timeSpanForGreatCold = timeSpanForGreatCold.Add(currentTimeSpan);
-                        break;
-                    case 3 when currentLocalDate.Day == 21:
-                        timeSpanForSpringEquinox = timeSpanForSpringEquinox.Add(currentTimeSpan);
-                        break;
-                    case 6 when currentLocalDate.Day == 22:
-                        timeSpanForSummerSolstice = timeSpanForSummerSolstice.Add(currentTimeSpan);
-                        break;
-                    case 9 when currentLocalDate.Day == 23:
-                        timeSpanForAutumnalEquinox = timeSpanForAutumnalEquinox.Add(currentTimeSpan);
-                        break;
-                    case 12 when currentLocalDate.Day == 22:
-                        timeSpanForWinterSolstice = timeSpanForWinterSolstice.Add(currentTimeSpan);
-                        break;
-                }
-            }
 
             if (heightAngle.Altitude >= 0)
             {
+                if (heightAngle.Altitude >= angle)
+                {
+                    exactSunshineTime = exactSunshineTime.Add(currentTimeSpan);
+
+                    switch (currentLocalDate.Month)
+                    {
+                        case 1 when currentLocalDate.Day == 20:
+                            timeSpanForGreatCold = timeSpanForGreatCold.Add(currentTimeSpan);
+                            break;
+                        case 3 when currentLocalDate.Day == 21:
+                            timeSpanForSpringEquinox = timeSpanForSpringEquinox.Add(currentTimeSpan);
+                            break;
+                        case 6 when currentLocalDate.Day == 22:
+                            timeSpanForSummerSolstice = timeSpanForSummerSolstice.Add(currentTimeSpan);
+                            break;
+                        case 9 when currentLocalDate.Day == 23:
+                            timeSpanForAutumnalEquinox = timeSpanForAutumnalEquinox.Add(currentTimeSpan);
+                            break;
+                        case 12 when currentLocalDate.Day == 22:
+                            timeSpanForWinterSolstice = timeSpanForWinterSolstice.Add(currentTimeSpan);
+                            break;
+                    }
+                }
+
                 totalSunshineTime = totalSunshineTime.Add(currentTimeSpan);
             }
         }
