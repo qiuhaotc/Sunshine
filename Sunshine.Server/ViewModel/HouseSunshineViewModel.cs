@@ -64,14 +64,14 @@ public class HouseSunshineViewModel
 
     public void SetSunshineInfo(HouseSunshineModel houseSunshineModel)
     {
-        TotalSunshineTime = $"{houseSunshineModel.TotalSunshineTime.TotalHours:F1}小时";
-        ExactSunshineTime = $"{houseSunshineModel.ExactSunshineTime.TotalHours:F1}小时";
-        SpringEquinox = $"{houseSunshineModel.SpringEquinox.TotalHours:F1}小时";
-        SummerSolstice = $"{houseSunshineModel.SummerSolstice.TotalHours:F1}小时";
-        AutumnalEquinox = $"{houseSunshineModel.AutumnalEquinox.TotalHours:F1}小时";
-        WinterSolstice = $"{houseSunshineModel.WinterSolstice.TotalHours:F1}小时";
-        GreatCold = $"{houseSunshineModel.GreatCold.TotalHours:F1}小时";
+        TotalSunshineTime = $"{houseSunshineModel.TotalSunshineTime.TotalHours:F3}小时";
+        ExactSunshineTime = $"{houseSunshineModel.ExactSunshineTime.TotalHours:F3}小时";
+        SpringEquinox = $"{houseSunshineModel.SpringEquinox.TotalHours:F3}小时";
+        SummerSolstice = $"{houseSunshineModel.SummerSolstice.TotalHours:F3}小时";
+        AutumnalEquinox = $"{houseSunshineModel.AutumnalEquinox.TotalHours:F3}小时";
+        WinterSolstice = $"{houseSunshineModel.WinterSolstice.TotalHours:F3}小时";
+        GreatCold = $"{houseSunshineModel.GreatCold.TotalHours:F3}小时";
 
-        SunshineTimePercent = $"{(houseSunshineModel.TotalSunshineTime.TotalHours == 0 ? 1d : houseSunshineModel.ExactSunshineTime.TotalHours / houseSunshineModel.TotalSunshineTime.TotalHours) * 100:F1}%";
+        SunshineTimePercent = $"{(houseSunshineModel.TotalSunshineTime.TotalHours == 0 ? 1d : houseSunshineModel.ExactSunshineTime.TotalHours / houseSunshineModel.TotalSunshineTime.TotalHours) * 100:F3}%";
     }
 }

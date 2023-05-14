@@ -23,7 +23,7 @@ public class SunshineCalculater
     {
         var tan = (houseInputModel.BlockLevel * houseInputModel.BlockLevelHeight - houseInputModel.LevelHeight * houseInputModel.Level) / houseInputModel.Distance;
         var angle = Math.Atan(tan);
-        var dateTimeUtc = new DateTime(houseInputModel.Year, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMinutes(-1).AddHours(-houseInputModel.TimeZone);
+        var dateTimeUtc = new DateTime(houseInputModel.Year, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddHours(-houseInputModel.TimeZone);
         var dateTimeToUtc = dateTimeUtc.AddYears(1);
         var minutesStep = SunshineConfiguration.MinutesStep > MinMinutesStep ? SunshineConfiguration.MinutesStep : MinMinutesStep;
         var totalSunshineTime = new TimeSpan();
