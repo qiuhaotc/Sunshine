@@ -4,7 +4,7 @@ using Sunshine.Business;
 
 namespace Sunshine.Server;
 
-public class HouseDaylightViewModel
+public class HouseInputViewModel
 {
     /// <summary>
     /// 经度
@@ -90,9 +90,9 @@ public class HouseDaylightViewModel
     const string ErrorMessageForRequired = "{0}不能为空";
     const string ErrorMessageForRange = "{0}范围是{1}到{2}";
 
-    public HouseDaylightModel GetHouseDaylightModel()
+    public HouseInputModel GetHouseDaylightModel()
     {
-        return new HouseDaylightModel
+        return new HouseInputModel
         {
             BlockLevel = BlockLevel,
             BlockLevelHeight = BlockLevelHeight,

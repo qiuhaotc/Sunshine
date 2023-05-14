@@ -2,7 +2,7 @@
 @using System.Diagnostics.CodeAnalysis;
 @using Microsoft.Extensions.Localization;
 @inject SunAngleHelper AngleHelper;
-@inject DaylightCalculater DaylightCalculater;
+@inject SunshineCalculater DaylightCalculater;
 @inject ILogger<Index> Logger;
 
 <PageTitle>房屋日照时间计算器</PageTitle>
@@ -10,8 +10,8 @@
 <h1>房屋日照时间计算器</h1>
 <Row ItemsPerRow="ItemsPerRow.Two">
     <GroupBox Title="参数" style="margin-top: 1.5rem;">
-        <ValidateForm Model="@Model" OnValidSubmit="@OnValidSubmit">
-            <EditorForm Model="@Model">
+        <ValidateForm Model="@InputViewModel" OnValidSubmit="@OnValidSubmit">
+            <EditorForm Model="@InputViewModel">
                 <Buttons>
                     <Button ButtonType="@ButtonType.Submit" IsAsync="true" Icon="fa-solid fa-calculator" Text="计算日照时间" IsBlock="true" Size="Size.Large" />
                 </Buttons>
@@ -20,14 +20,16 @@
     </GroupBox>
 
     <GroupBox Title="结果" style="margin-top: 1.5rem;">
-        <EditorForm Model="@Sunshine">
+        <EditorForm Model="@SunshineViewModel">
         </EditorForm>
     </GroupBox>
 </Row>
+<Message @ref="Message" Placement="Placement.Bottom" />
 
 @code {
-    HouseDaylightViewModel Model { get; set; } = new HouseDaylightViewModel();
-    SunshineViewInfo Sunshine { get; set; } = new SunshineViewInfo();
+    HouseInputViewModel InputViewModel { get; set; } = new HouseInputViewModel();
+    HouseSunshineViewModel SunshineViewModel { get; set; } = new HouseSunshineViewModel();
+    Message? Message { get; set; }
 
     /// <summary>
     /// OnInitialized
@@ -37,13 +39,12 @@
         base.OnInitialized();
     }
 
-    Task OnValidSubmit(EditContext context)
+    async Task OnValidSubmit(EditContext context)
     {
-        var model = (HouseDaylightViewModel)context.Model;
-        Sunshine.SetSunshineInfo(DaylightCalculater.GetSunshineInfo(model.GetHouseDaylightModel()));
-        Logger.LogInformation(Sunshine.ExactSunshineTime);
+        var model = (HouseInputViewModel)context.Model;
+        SunshineViewModel.SetSunshineInfo(DaylightCalculater.GetSunshineInfo(model.GetHouseDaylightModel()));
         StateHasChanged();
 
-        return Task.CompletedTask;
+        await Task.CompletedTask;
     }
 }

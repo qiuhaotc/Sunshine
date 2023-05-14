@@ -1,6 +1,6 @@
 ﻿namespace Sunshine.Business;
 
-public class SunshineInfo
+public class HouseSunshineModel
 {
     public TimeSpan ExactSunshineTime { get; internal set; }
     public TimeSpan SpringEquinox { get; internal set; }

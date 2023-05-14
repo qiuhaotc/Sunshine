@@ -4,7 +4,7 @@ using Sunshine.Business;
 
 namespace Sunshine.Server;
 
-public class SunshineViewInfo
+public class HouseSunshineViewModel
 {
     /// <summary>
     /// 房屋日照时间
@@ -62,16 +62,16 @@ public class SunshineViewInfo
     [Display(Name = "大寒 1月20日")]
     public string GreatCold { get; set; } = string.Empty;
 
-    public void SetSunshineInfo(SunshineInfo sunshineInfo)
+    public void SetSunshineInfo(HouseSunshineModel houseSunshineModel)
     {
-        TotalSunshineTime = $"{sunshineInfo.TotalSunshineTime.TotalHours:F1}小时";
-        ExactSunshineTime = $"{sunshineInfo.ExactSunshineTime.TotalHours:F1}小时";
-        SpringEquinox = $"{sunshineInfo.SpringEquinox.TotalHours:F1}小时";
-        SummerSolstice = $"{sunshineInfo.SummerSolstice.TotalHours:F1}小时";
-        AutumnalEquinox = $"{sunshineInfo.AutumnalEquinox.TotalHours:F1}小时";
-        WinterSolstice = $"{sunshineInfo.WinterSolstice.TotalHours:F1}小时";
-        GreatCold = $"{sunshineInfo.GreatCold.TotalHours:F1}小时";
+        TotalSunshineTime = $"{houseSunshineModel.TotalSunshineTime.TotalHours:F1}小时";
+        ExactSunshineTime = $"{houseSunshineModel.ExactSunshineTime.TotalHours:F1}小时";
+        SpringEquinox = $"{houseSunshineModel.SpringEquinox.TotalHours:F1}小时";
+        SummerSolstice = $"{houseSunshineModel.SummerSolstice.TotalHours:F1}小时";
+        AutumnalEquinox = $"{houseSunshineModel.AutumnalEquinox.TotalHours:F1}小时";
+        WinterSolstice = $"{houseSunshineModel.WinterSolstice.TotalHours:F1}小时";
+        GreatCold = $"{houseSunshineModel.GreatCold.TotalHours:F1}小时";
 
-        SunshineTimePercent = $"{(sunshineInfo.TotalSunshineTime.TotalHours == 0 ? 1d : sunshineInfo.ExactSunshineTime.TotalHours / sunshineInfo.TotalSunshineTime.TotalHours) * 100:F1}%";
+        SunshineTimePercent = $"{(houseSunshineModel.TotalSunshineTime.TotalHours == 0 ? 1d : houseSunshineModel.ExactSunshineTime.TotalHours / houseSunshineModel.TotalSunshineTime.TotalHours) * 100:F1}%";
     }
 }

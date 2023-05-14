@@ -11,7 +11,7 @@ builder.Configuration.GetSection("SunshineConfiguration").Bind(sunshineConfigura
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<SunAngleHelper>();
-builder.Services.AddSingleton<DaylightCalculater>();
+builder.Services.AddSingleton<SunshineCalculater>();
 builder.Services.AddSingleton(sunshineConfiguration);
 builder.Services.AddBootstrapBlazor();
 

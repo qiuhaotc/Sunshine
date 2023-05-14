@@ -3,27 +3,27 @@ using Microsoft.Extensions.Logging;
 
 namespace Sunshine.Business;
 
-public class DaylightCalculater
+public class SunshineCalculater
 {
-    public DaylightCalculater(ILogger<DaylightCalculater> logger, SunAngleHelper sunAngleHelper, SunshineConfiguration sunshineConfiguration)
+    public SunshineCalculater(ILogger<SunshineCalculater> logger, SunAngleHelper sunAngleHelper, SunshineConfiguration sunshineConfiguration)
     {
         Logger = logger;
         SunAngleHelper = sunAngleHelper;
         SunshineConfiguration = sunshineConfiguration;
     }
 
-    ILogger<DaylightCalculater> Logger { get; }
+    ILogger<SunshineCalculater> Logger { get; }
 
     SunAngleHelper SunAngleHelper { get; }
     SunshineConfiguration SunshineConfiguration { get; }
 
     const int MinMinutesStep = 1;
 
-    public SunshineInfo GetSunshineInfo(HouseDaylightModel houseDaylightModel)
+    public HouseSunshineModel GetSunshineInfo(HouseInputModel houseDaylightModel)
     {
         var tan = (houseDaylightModel.BlockLevel * houseDaylightModel.BlockLevelHeight - houseDaylightModel.LevelHeight * houseDaylightModel.Level) / houseDaylightModel.Distance;
         var angle = Math.Atan(tan);
-        var dateTimeUtc = new DateTime(houseDaylightModel.Year - 1, 12, 31, 23, 59, 59, DateTimeKind.Utc).AddHours(-houseDaylightModel.TimeZone);
+        var dateTimeUtc = new DateTime(houseDaylightModel.Year, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMinutes(-1).AddHours(-houseDaylightModel.TimeZone);
         var dateTimeToUtc = dateTimeUtc.AddYears(1);
         var minutesStep = SunshineConfiguration.MinutesStep > MinMinutesStep ? SunshineConfiguration.MinutesStep : MinMinutesStep;
         var totalSunshineTime = new TimeSpan();
@@ -69,7 +69,7 @@ public class DaylightCalculater
             }
         }
 
-        var sunshineInfo = new SunshineInfo
+        var sunshineInfo = new HouseSunshineModel
         {
             TotalSunshineTime = totalSunshineTime,
             ExactSunshineTime = exactSunshineTime,

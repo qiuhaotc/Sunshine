@@ -1,6 +1,6 @@
 ﻿namespace Sunshine.Business;
 
-public class HouseDaylightModel
+public class HouseInputModel
 {
     /// <summary>
     /// 经度
