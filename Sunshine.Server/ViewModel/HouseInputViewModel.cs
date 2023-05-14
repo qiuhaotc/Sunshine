@@ -90,7 +90,7 @@ public class HouseInputViewModel
     const string ErrorMessageForRequired = "{0}不能为空";
     const string ErrorMessageForRange = "{0}范围是{1}到{2}";
 
-    public HouseInputModel GetHouseDaylightModel()
+    public HouseInputModel GetHouseInputModel()
     {
         return new HouseInputModel
         {

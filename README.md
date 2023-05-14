@@ -1,4 +1,4 @@
-# 房屋日照时间计算器/House Daylight Calculator
+# 房屋日照时间计算器/House Sunshine Time Calculator
 
 通过经纬度计算房屋日照时间
 

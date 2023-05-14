@@ -19,11 +19,11 @@ public class SunshineCalculater
 
     const int MinMinutesStep = 1;
 
-    public HouseSunshineModel GetSunshineInfo(HouseInputModel houseDaylightModel)
+    public HouseSunshineModel GetSunshineInfo(HouseInputModel houseInputModel)
     {
-        var tan = (houseDaylightModel.BlockLevel * houseDaylightModel.BlockLevelHeight - houseDaylightModel.LevelHeight * houseDaylightModel.Level) / houseDaylightModel.Distance;
+        var tan = (houseInputModel.BlockLevel * houseInputModel.BlockLevelHeight - houseInputModel.LevelHeight * houseInputModel.Level) / houseInputModel.Distance;
         var angle = Math.Atan(tan);
-        var dateTimeUtc = new DateTime(houseDaylightModel.Year, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMinutes(-1).AddHours(-houseDaylightModel.TimeZone);
+        var dateTimeUtc = new DateTime(houseInputModel.Year, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMinutes(-1).AddHours(-houseInputModel.TimeZone);
         var dateTimeToUtc = dateTimeUtc.AddYears(1);
         var minutesStep = SunshineConfiguration.MinutesStep > MinMinutesStep ? SunshineConfiguration.MinutesStep : MinMinutesStep;
         var totalSunshineTime = new TimeSpan();
@@ -37,8 +37,8 @@ public class SunshineCalculater
 
         for (var currentDateTimeUtc = dateTimeUtc; currentDateTimeUtc < dateTimeToUtc; currentDateTimeUtc = currentDateTimeUtc.AddMinutes(minutesStep))
         {
-            var currentLocalDate = currentDateTimeUtc.AddHours(houseDaylightModel.TimeZone);
-            var heightAngle = SunAngleHelper.GetSunAngle(houseDaylightModel.Latitude, houseDaylightModel.Longitude, currentDateTimeUtc);
+            var currentLocalDate = currentDateTimeUtc.AddHours(houseInputModel.TimeZone);
+            var heightAngle = SunAngleHelper.GetSunAngle(houseInputModel.Latitude, houseInputModel.Longitude, currentDateTimeUtc);
             if (heightAngle.Altitude >= angle)
             {
                 exactSunshineTime = exactSunshineTime.Add(currentTimeSpan);
@@ -80,7 +80,7 @@ public class SunshineCalculater
             GreatCold = timeSpanForGreatCold,
         };
 
-        Logger.LogInformation($"House Daylight Model: {JsonSerializer.Serialize(houseDaylightModel)}, Minutes Step: {minutesStep}, Angle: {angle}, Calculate start from: {dateTimeUtc:yyyy-MM-dd HH:ss:mm} to {dateTimeToUtc:yyyy-MM-dd HH:ss:mm}, Sunshine Info: {JsonSerializer.Serialize(sunshineInfo)}");
+        Logger.LogInformation($"House Input Model: {JsonSerializer.Serialize(houseInputModel)}, Minutes Step: {minutesStep}, Angle: {angle}, Calculate start from: {dateTimeUtc:yyyy-MM-dd HH:ss:mm} to {dateTimeToUtc:yyyy-MM-dd HH:ss:mm}, Sunshine Info: {JsonSerializer.Serialize(sunshineInfo)}");
 
         return sunshineInfo;
     }

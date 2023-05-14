@@ -2,7 +2,7 @@
 @using System.Diagnostics.CodeAnalysis;
 @using Microsoft.Extensions.Localization;
 @inject SunAngleHelper AngleHelper;
-@inject SunshineCalculater DaylightCalculater;
+@inject SunshineCalculater SunshineCalculater;
 @inject ILogger<Index> Logger;
 
 <PageTitle>房屋日照时间计算器</PageTitle>
@@ -42,7 +42,7 @@
     async Task OnValidSubmit(EditContext context)
     {
         var model = (HouseInputViewModel)context.Model;
-        SunshineViewModel.SetSunshineInfo(DaylightCalculater.GetSunshineInfo(model.GetHouseDaylightModel()));
+        SunshineViewModel.SetSunshineInfo(SunshineCalculater.GetSunshineInfo(model.GetHouseInputModel()));
         StateHasChanged();
 
         await Task.CompletedTask;
