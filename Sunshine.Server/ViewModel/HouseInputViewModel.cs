@@ -1,4 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Globalization;
+using System.Reflection;
+using System.Text.Json;
 using BootstrapBlazor.Components;
 using Sunshine.Business;
 
@@ -7,13 +10,47 @@ namespace Sunshine.Server;
 public class HouseInputViewModel
 {
     /// <summary>
+    /// 地区
+    /// </summary>
+    [Display(Name = "地区")]
+    [AutoGenerateColumn(Order = 1)]
+    public SelectedItem? AreaSelectedItem
+    {
+        get
+        {
+            return area ?? areaDefaultValue;
+        }
+        set
+        {
+            area = value;
+            if (value == null)
+            {
+                Longitude = 0;
+                Latitude = 0;
+            }
+            else if (value.Value != string.Empty)
+            {
+                var values = value.Value.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                if (values.Length == 2)
+                {
+                    double.TryParse(values[0], CultureInfo.InvariantCulture, out var longitude);
+                    double.TryParse(values[1], CultureInfo.InvariantCulture, out var latitude);
+
+                    Longitude = Math.Round(longitude, 6);
+                    Latitude = Math.Round(latitude, 6);
+                }
+            }
+        }
+    }
+
+    /// <summary>
     /// 经度
     /// </summary>
     [Required(ErrorMessage = ErrorMessageForRequired)]
     [Display(Name = "经度")]
     [AutoGenerateColumn(Order = 2, Step = 0.000001)]
     [Range(-180d, 180d, ErrorMessage = ErrorMessageForRange)]
-    public double Longitude { get; set; } = 118.794135;
+    public double Longitude { get; set; } = 118.510117;
 
     /// <summary>
     /// 纬度
@@ -22,7 +59,7 @@ public class HouseInputViewModel
     [Range(-90d, 90d, ErrorMessage = ErrorMessageForRange)]
     [AutoGenerateColumn(Order = 4, Step = 0.000001)]
     [Display(Name = "纬度")]
-    public double Latitude { get; set; } = 32.072277;
+    public double Latitude { get; set; } = 31.684327;
 
     /// <summary>
     /// 所在楼层
@@ -87,8 +124,18 @@ public class HouseInputViewModel
     [Display(Name = "年份")]
     public int Year { get; set; } = DateTime.Now.Year;
 
+    [AutoGenerateColumn(Ignore = true)]
+    public IEnumerable<SelectedItem>? AreasSelectedItems => AreasSelectedItemsStatic;
+
     const string ErrorMessageForRequired = "{0}不能为空";
     const string ErrorMessageForRange = "{0}范围是{1}到{2}";
+    SelectedItem? area;
+    SelectedItem areaDefaultValue = new SelectedItem("", "请选择 ...");
+
+    public HouseInputViewModel()
+    {
+        InitAreas();
+    }
 
     public HouseInputModel GetHouseInputModel()
     {
@@ -105,4 +152,30 @@ public class HouseInputViewModel
             LevelHeight = LevelHeight,
         };
     }
+
+    void InitAreas()
+    {
+        if (AreasStatic == null)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "Sunshine.Server.data.json";
+
+            using var stream = assembly.GetManifestResourceStream(resourceName);
+            if (stream != null)
+            {
+                AreasStatic = JsonSerializer.Deserialize<List<AreaInfo>>(stream);
+
+                if (AreasStatic != null)
+                {
+                    AreasSelectedItemsStatic = new[] { areaDefaultValue }.Concat(AreasStatic.Select(x => new SelectedItem($"{x.Longitude} {x.Latitude}", $"{x.Province} {x.City}"))).ToArray();
+                }
+            }
+
+            AreasStatic ??= new List<AreaInfo>();
+            AreasSelectedItemsStatic ??= new List<SelectedItem>();
+        }
+    }
+
+    static IEnumerable<AreaInfo>? AreasStatic;
+    static IEnumerable<SelectedItem>? AreasSelectedItemsStatic;
 }

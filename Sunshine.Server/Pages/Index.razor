@@ -12,6 +12,15 @@
     <GroupBox Title="参数" style="margin-top: 1.5rem;">
         <ValidateForm Model="@InputViewModel" OnValidSubmit="@OnValidSubmit">
             <EditorForm Model="@InputViewModel">
+                <FieldItems>
+                    <EditorItem @bind-Field="@context.AreaSelectedItem">
+                        <EditTemplate Context="value">
+                            <div class="col-12">
+                                <Select @bind-Value="@value.AreaSelectedItem" Items="@InputViewModel.AreasSelectedItems" ShowSearch="true" IsClearable="true" />
+                            </div>
+                        </EditTemplate>
+                    </EditorItem>
+                </FieldItems>
                 <Buttons>
                     <Button ButtonType="@ButtonType.Submit" IsAsync="true" Icon="fa-solid fa-calculator" Text="计算日照时间" IsBlock="true" Size="Size.Large" />
                 </Buttons>
@@ -27,7 +36,7 @@
         {
             <Card Color="@SunshineViewModel.ValidateResultColor" style="margin-top: 1.5rem;">
                 <BodyTemplate>
-                    <p class="card-text"><i class="fas fa-building" /> @SunshineViewModel.ValidateResult</p>
+                    <h4 class="card-text"><i class="fas fa-building" /> @SunshineViewModel.ValidateResult</h4>
                 </BodyTemplate>
             </Card>
         }
