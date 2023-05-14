@@ -125,7 +125,7 @@ public class HouseInputViewModel
     public int Year { get; set; } = DateTime.Now.Year;
 
     [AutoGenerateColumn(Ignore = true)]
-    public IEnumerable<SelectedItem>? AreasSelectedItems => AreasSelectedItemsStatic;
+    public IEnumerable<SelectedItem> AreasSelectedItems => AreasSelectedItemsStatic ?? Enumerable.Empty<SelectedItem>();
 
     const string ErrorMessageForRequired = "{0}不能为空";
     const string ErrorMessageForRange = "{0}范围是{1}到{2}";
@@ -155,7 +155,7 @@ public class HouseInputViewModel
 
     void InitAreas()
     {
-        if (AreasStatic == null)
+        if (AreasSelectedItemsStatic == null)
         {
             var assembly = Assembly.GetExecutingAssembly();
             var resourceName = "Sunshine.Server.data.json";
@@ -163,19 +163,17 @@ public class HouseInputViewModel
             using var stream = assembly.GetManifestResourceStream(resourceName);
             if (stream != null)
             {
-                AreasStatic = JsonSerializer.Deserialize<List<AreaInfo>>(stream);
+                var areasStatic = JsonSerializer.Deserialize<List<AreaInfo>>(stream);
 
-                if (AreasStatic != null)
+                if (areasStatic != null)
                 {
-                    AreasSelectedItemsStatic = new[] { areaDefaultValue }.Concat(AreasStatic.Select(x => new SelectedItem($"{x.Longitude} {x.Latitude}", $"{x.Province} {x.City}"))).ToArray();
+                    AreasSelectedItemsStatic = new[] { areaDefaultValue }.Concat(areasStatic.Select(x => new SelectedItem($"{x.Longitude} {x.Latitude}", $"{x.Province} {x.City}"))).ToArray();
                 }
             }
 
-            AreasStatic ??= new List<AreaInfo>();
             AreasSelectedItemsStatic ??= new List<SelectedItem>();
         }
     }
 
-    static IEnumerable<AreaInfo>? AreasStatic;
     static IEnumerable<SelectedItem>? AreasSelectedItemsStatic;
 }

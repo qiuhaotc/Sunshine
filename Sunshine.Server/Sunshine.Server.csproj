@@ -17,9 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BootstrapBlazor" Version="7.6.2" />
+    <PackageReference Include="BootstrapBlazor" Version="7.6.3" />
     <PackageReference Include="BootstrapBlazor.FontAwesome" Version="7.4.2" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="5.2.3" />
   </ItemGroup>
 

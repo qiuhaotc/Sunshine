@@ -19,7 +19,7 @@ public class SunshineCalculater
 
     const int MinMinutesStep = 1;
 
-    public HouseSunshineModel GetSunshineInfo(HouseInputModel houseInputModel)
+    public HouseSunshineModel GetHouseSunshineModel(HouseInputModel houseInputModel)
     {
         var tan = (houseInputModel.BlockLevel * houseInputModel.BlockLevelHeight - houseInputModel.LevelHeight * houseInputModel.Level) / houseInputModel.Distance;
         var angle = Math.Atan(tan);

@@ -2,11 +2,11 @@
 
 public class HouseSunshineModel
 {
-    public TimeSpan ExactSunshineTime { get; internal set; }
-    public TimeSpan SpringEquinox { get; internal set; }
-    public TimeSpan SummerSolstice { get; internal set; }
-    public TimeSpan AutumnalEquinox { get; internal set; }
-    public TimeSpan WinterSolstice { get; internal set; }
-    public TimeSpan TotalSunshineTime { get; internal set; }
-    public TimeSpan GreatCold { get; internal set; }
+    public TimeSpan ExactSunshineTime { get; set; }
+    public TimeSpan SpringEquinox { get; set; }
+    public TimeSpan SummerSolstice { get; set; }
+    public TimeSpan AutumnalEquinox { get; set; }
+    public TimeSpan WinterSolstice { get; set; }
+    public TimeSpan TotalSunshineTime { get; set; }
+    public TimeSpan GreatCold { get; set; }
 }

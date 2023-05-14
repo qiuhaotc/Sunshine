@@ -58,7 +58,7 @@
     async Task OnValidSubmit(EditContext context)
     {
         var model = (HouseInputViewModel)context.Model;
-        SunshineViewModel.SetSunshineInfo(SunshineCalculater.GetSunshineInfo(model.GetHouseInputModel()));
+        SunshineViewModel.SetSunshineInfo(SunshineCalculater.GetHouseSunshineModel(model.GetHouseInputModel()));
         StateHasChanged();
 
         await Task.CompletedTask;
