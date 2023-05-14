@@ -16,7 +16,7 @@
                     <EditorItem @bind-Field="@context.AreaSelectedItem">
                         <EditTemplate Context="value">
                             <div class="col-12">
-                                <Select @bind-Value="@value.AreaSelectedItem" Items="@InputViewModel.AreasSelectedItems" ShowSearch="true" IsClearable="true" />
+                                <Select @bind-Value="@value.AreaSelectedItem" Items="@InputViewModel.AreasSelectedItems" ShowSearch="true" IsClearable="true" SkipValidate="true" />
                             </div>
                         </EditTemplate>
                     </EditorItem>
