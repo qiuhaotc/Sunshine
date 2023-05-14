@@ -8,18 +8,11 @@
 <PageTitle>房屋日照时间计算器</PageTitle>
 
 <h1>房屋日照时间计算器</h1>
-<GroupBox Title="房屋日照时间计算器" style="margin-top: 1.5rem;">
+<GroupBox Title="参数" style="margin-top: 1.5rem;">
     <ValidateForm Model="@Model" OnValidSubmit="@OnValidSubmit">
         <EditorForm Model="@Model">
-            <FieldItems>
-                <EditorItem @bind-Field="@context.CurrentDateTime">
-                    <EditTemplate Context="value">
-                        <DateTimePicker @bind-Value="context.CurrentDateTime" ShowLabel="true" ViewMode="DatePickerViewMode.DateTime" Format="yyyy-MM-dd HH:mm:ss" />
-                    </EditTemplate>
-                </EditorItem>
-            </FieldItems>
             <Buttons>
-                <Button ButtonType="@ButtonType.Submit" IsAsync="true" Icon="fa-solid fa-floppy-disk" Text="计算" />
+                <Button ButtonType="@ButtonType.Submit" IsAsync="true" Icon="fa-solid fa-calculator" Text="计算日照时间" IsBlock="true" Size="Size.Large" />
             </Buttons>
         </EditorForm>
     </ValidateForm>
@@ -46,7 +39,7 @@
     {
         var model = (HouseDaylightViewModel)context.Model;
         Sunshine.SetSunshineInfo(DaylightCalculater.GetSunshineInfo(model.GetHouseDaylightModel()));
-        Logger.LogInformation(Sunshine.TimeSpanString);
+        Logger.LogInformation(Sunshine.ExactSunshineTime);
         StateHasChanged();
 
         return Task.CompletedTask;

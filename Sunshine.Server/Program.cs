@@ -4,12 +4,15 @@ using Sunshine.Business;
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseNLog();
 
+var sunshineConfiguration = new SunshineConfiguration();
+builder.Configuration.GetSection("SunshineConfiguration").Bind(sunshineConfiguration);
+
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<SunAngleHelper>();
 builder.Services.AddSingleton<DaylightCalculater>();
-
+builder.Services.AddSingleton(sunshineConfiguration);
 builder.Services.AddBootstrapBlazor();
 
 var app = builder.Build();

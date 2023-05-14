@@ -1,40 +1,83 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Text.Json;
+using Microsoft.Extensions.Logging;
 
 namespace Sunshine.Business;
 
 public class DaylightCalculater
 {
-    public DaylightCalculater(ILogger<DaylightCalculater> logger, SunAngleHelper sunAngleHelper)
+    public DaylightCalculater(ILogger<DaylightCalculater> logger, SunAngleHelper sunAngleHelper, SunshineConfiguration sunshineConfiguration)
     {
         Logger = logger;
         SunAngleHelper = sunAngleHelper;
+        SunshineConfiguration = sunshineConfiguration;
     }
 
     ILogger<DaylightCalculater> Logger { get; }
 
     SunAngleHelper SunAngleHelper { get; }
+    SunshineConfiguration SunshineConfiguration { get; }
 
-    const int MinutesStep = 30;
+    const int MinMinutesStep = 1;
 
     public SunshineInfo GetSunshineInfo(HouseDaylightModel houseDaylightModel)
     {
-        var tan = (houseDaylightModel.BlockLevel * houseDaylightModel.BlockLevelHeight - (houseDaylightModel.LevelHeight / 2d)) / houseDaylightModel.Distance;
+        var tan = (houseDaylightModel.BlockLevel * houseDaylightModel.BlockLevelHeight - houseDaylightModel.LevelHeight * houseDaylightModel.Level) / houseDaylightModel.Distance;
         var angle = Math.Atan(tan);
+        var dateTimeUtc = new DateTime(houseDaylightModel.Year - 1, 12, 31, 0, 0, 0, DateTimeKind.Utc).AddHours(-houseDaylightModel.TimeZone);
+        var minutesStep = SunshineConfiguration.MinutesStep > MinMinutesStep ? SunshineConfiguration.MinutesStep : MinMinutesStep;
+        var totalSunshineTime = new TimeSpan();
+        var exactSunshineTime = new TimeSpan();
+        var timeSpanForSpringEquinox = new TimeSpan();
+        var timeSpanForSummerSolstice = new TimeSpan();
+        var timeSpanForAutumnalEquinox = new TimeSpan();
+        var timeSpanForWinterSolstice = new TimeSpan();
+        var currentTimeSpan = TimeSpan.FromMinutes(minutesStep);
 
-        var dateTime = new DateTime(DateTime.Now.Year - 1, 12, 31);
-        var timeSpan = new TimeSpan();
-        for (var i = 0; i <= 365 * 24 * 60; i += MinutesStep)
+        for (var i = 0; i <= 365 * 24 * 60; i += minutesStep)
         {
-            var heightAngle = SunAngleHelper.GetSunAngle(houseDaylightModel.Latitude, houseDaylightModel.Longitude, dateTime.AddMinutes(i));
+            var currentUtcDate = dateTimeUtc.AddMinutes(i);
+            var currentLocalDate = currentUtcDate.AddHours(houseDaylightModel.TimeZone);
+            var heightAngle = SunAngleHelper.GetSunAngle(houseDaylightModel.Latitude, houseDaylightModel.Longitude, currentUtcDate);
             if (heightAngle.Altitude >= angle)
             {
-                timeSpan = timeSpan.Add(TimeSpan.FromMinutes(MinutesStep));
+                exactSunshineTime = exactSunshineTime.Add(currentTimeSpan);
+
+                if (currentLocalDate.Month == 3 && currentLocalDate.Day == 21)
+                {
+                    timeSpanForSpringEquinox = timeSpanForSpringEquinox.Add(currentTimeSpan);
+                }
+                else if (currentLocalDate.Month == 6 && currentLocalDate.Day == 22)
+                {
+                    timeSpanForSummerSolstice = timeSpanForSummerSolstice.Add(currentTimeSpan);
+                }
+                else if (currentLocalDate.Month == 9 && currentLocalDate.Day == 23)
+                {
+                    timeSpanForAutumnalEquinox = timeSpanForAutumnalEquinox.Add(currentTimeSpan);
+                }
+                else if (currentLocalDate.Month == 12 && currentLocalDate.Day == 22)
+                {
+                    timeSpanForWinterSolstice = timeSpanForWinterSolstice.Add(currentTimeSpan);
+                }
+            }
+
+            if (heightAngle.Altitude >= 0)
+            {
+                totalSunshineTime = totalSunshineTime.Add(currentTimeSpan);
             }
         }
 
-        return new SunshineInfo
+        var sunshineInfo = new SunshineInfo
         {
-            TotalSunshineTime = timeSpan,
+            TotalSunshineTime = totalSunshineTime,
+            ExactSunshineTime = exactSunshineTime,
+            SpringEquinox = timeSpanForSpringEquinox,
+            SummerSolstice = timeSpanForSummerSolstice,
+            AutumnalEquinox = timeSpanForAutumnalEquinox,
+            WinterSolstice = timeSpanForWinterSolstice,
         };
+
+        Logger.LogInformation($"House Daylight Model: {JsonSerializer.Serialize(houseDaylightModel)}, Minutes Step: {minutesStep}, Angle: {angle}, Calculate start from: {dateTimeUtc:yyyy-MM-dd HH:ss:mm}, Sunshine Info: {JsonSerializer.Serialize(sunshineInfo)}");
+
+        return sunshineInfo;
     }
 }

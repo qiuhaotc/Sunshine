@@ -28,7 +28,7 @@ public class HouseDaylightModel
     public double Distance { get; set; }
 
     /// <summary>
-    /// 前面遮挡的楼层数
+    /// 前面遮挡的总楼层数
     /// </summary>
     public int BlockLevel { get; set; }
 
@@ -39,9 +39,9 @@ public class HouseDaylightModel
     public double BlockLevelHeight { get; set; }
 
     /// <summary>
-    /// 当前时间
+    /// 年份
     /// </summary>
-    public DateTime? CurrentDateTime { get; set; }
+    public int Year { get; set; }
 
     /// <summary>
     /// 时区
