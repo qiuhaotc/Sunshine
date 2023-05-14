@@ -2,7 +2,8 @@ using NLog.Web;
 using Sunshine.Business;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Host.UseNLog();
+builder.Logging.ClearProviders();
+builder.Host.UseNLog(new NLogAspNetCoreOptions() { RemoveLoggerFactoryFilter = false });
 
 var sunshineConfiguration = new SunshineConfiguration();
 builder.Configuration.GetSection("SunshineConfiguration").Bind(sunshineConfiguration);
