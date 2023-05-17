@@ -1,66 +1,17 @@
 ﻿@page "/"
-@using System.Diagnostics.CodeAnalysis;
-@using Microsoft.Extensions.Localization;
-@inject SunAngleHelper AngleHelper;
-@inject SunshineCalculater SunshineCalculater;
-@inject ILogger<Index> Logger;
 
 <PageTitle>房屋日照时间计算器</PageTitle>
 
 <h1>房屋日照时间计算器</h1>
-<Row ItemsPerRow="ItemsPerRow.Two">
-    <GroupBox Title="参数" style="margin-top: 1.5rem;">
-        <ValidateForm Model="@InputViewModel" OnValidSubmit="@OnValidSubmit">
-            <EditorForm Model="@InputViewModel">
-                <FieldItems>
-                    <EditorItem @bind-Field="@context.AreaSelectedItem">
-                        <EditTemplate Context="value">
-                            <div class="col-12">
-                                <Select @bind-Value="@value.AreaSelectedItem" Items="@InputViewModel.AreasSelectedItems" ShowSearch="true" IsClearable="true" SkipValidate="true" />
-                            </div>
-                        </EditTemplate>
-                    </EditorItem>
-                </FieldItems>
-                <Buttons>
-                    <Button ButtonType="@ButtonType.Submit" IsAsync="true" Icon="fa-solid fa-calculator" Text="计算日照时间" IsBlock="true" Size="Size.Large" />
-                </Buttons>
-            </EditorForm>
-        </ValidateForm>
-    </GroupBox>
-
-    <GroupBox Title="结果" style="margin-top: 1.5rem;">
-        <EditorForm Model="@SunshineViewModel">
-        </EditorForm>
-
-        @if (SunshineViewModel.ValidateResultVisible)
-        {
-            <Card Color="@SunshineViewModel.ValidateResultColor" style="margin-top: 1.5rem;">
-                <BodyTemplate>
-                    <h4 class="card-text"><i class="fas fa-building" /> @SunshineViewModel.ValidateResult</h4>
-                </BodyTemplate>
-            </Card>
-        }
-    </GroupBox>
-</Row>
+<Tab>
+    <TabItem Text="基础">
+        <SimpleCalculator />
+    </TabItem>
+    <TabItem Text="高级">
+        <AdvancedCalculator />
+    </TabItem>
+</Tab>
 
 @code {
-    HouseInputViewModel InputViewModel { get; set; } = new HouseInputViewModel();
-    HouseSunshineViewModel SunshineViewModel { get; set; } = new HouseSunshineViewModel();
 
-    /// <summary>
-    /// OnInitialized
-    /// </summary>
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-    }
-
-    async Task OnValidSubmit(EditContext context)
-    {
-        var model = (HouseInputViewModel)context.Model;
-        SunshineViewModel.SetSunshineInfo(SunshineCalculater.GetHouseSunshineModel(model.GetHouseInputModel()));
-        StateHasChanged();
-
-        await Task.CompletedTask;
-    }
 }

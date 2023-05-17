@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sunshine.Business", "Sunshine.Business\Sunshine.Business.csproj", "{6039EB76-1EE1-4473-823B-2FDF181FAB73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sunshine.Test", "Sunshine.Test\Sunshine.Test.csproj", "{597B47F0-88CF-45FE-9649-AE6494DDD2E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sunshine.Test", "Sunshine.Test\Sunshine.Test.csproj", "{597B47F0-88CF-45FE-9649-AE6494DDD2E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
