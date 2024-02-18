@@ -48,7 +48,7 @@ public class HouseInputViewModel
     /// </summary>
     [Required(ErrorMessage = ErrorMessageForRequired)]
     [Display(Name = "经度")]
-    [AutoGenerateColumn(Order = 2, Step = 0.000001)]
+    [AutoGenerateColumn(Order = 2, Step = "0.000001")]
     [Range(-180d, 180d, ErrorMessage = ErrorMessageForRange)]
     public double Longitude { get; set; } = 118.510117;
 
@@ -57,7 +57,7 @@ public class HouseInputViewModel
     /// </summary>
     [Required(ErrorMessage = ErrorMessageForRequired)]
     [Range(-90d, 90d, ErrorMessage = ErrorMessageForRange)]
-    [AutoGenerateColumn(Order = 4, Step = 0.000001)]
+    [AutoGenerateColumn(Order = 4, Step = "0.000001")]
     [Display(Name = "纬度")]
     public double Latitude { get; set; } = 31.684327;
 

@@ -8,7 +8,7 @@
 <Row ItemsPerRow="ItemsPerRow.Two">
     <GroupBox Title="参数" style="margin-top: 1.5rem;">
         <ValidateForm Model="@InputViewModel" OnValidSubmit="@OnValidSubmit">
-            <EditorForm Model="@InputViewModel">
+            <EditorForm Model="@InputViewModel" ItemsPerRow="1">
                 <FieldItems>
                     <EditorItem @bind-Field="@context.AreaSelectedItem">
                         <EditTemplate Context="value">
@@ -26,7 +26,7 @@
     </GroupBox>
 
     <GroupBox Title="结果" style="margin-top: 1.5rem;">
-        <EditorForm Model="@SunshineViewModel">
+        <EditorForm Model="@SunshineViewModel" ItemsPerRow="1">
         </EditorForm>
 
         @if (SunshineViewModel.ValidateResultVisible)
