@@ -1,13 +1,172 @@
 ﻿@namespace Sunshine.Server
+@inject IJSRuntime JS
 
-<Row ItemsPerRow="ItemsPerRow.Two">
-    <GroupBox Title="参数" style="margin-top: 1.5rem;">
-    </GroupBox>
+<div class="ac-layout">
+    <div class="ac-sidebar">
+        <GroupBox Title="参数" style="margin-top: 0; flex:1 1 auto; display:flex; flex-direction:column;">
+            <div class="form-section">
+                <h4>基础数据</h4>
+                <label>纬度 <input id="ac-lat" type="number" step="0.0001" value="31.2304" /></label>
+                <label>经度 <input id="ac-lon" type="number" step="0.0001" value="121.4737" /></label>
+                <label>网格边长(米/每格)<input id="ac-scale" type="number" min="1" max="500" value="10" /></label>
+                <button id="ac-btn-scale" type="button">应用比例尺</button>
+            </div>
+            <div class="form-section">
+                <h4>楼栋绘制</h4>
+                <label>宽度(米) <input id="ac-b-width" type="number" step="0.1" value="54" /></label>
+                <label>长度(米) <input id="ac-b-length" type="number" step="0.1" value="10" /></label>
+                <label>总高度(米) <input id="ac-b-height" type="number" step="0.1" value="60" /></label>
+                <label>层高(米) <input id="ac-b-floorHeight" type="number" step="0.1" value="3" /></label>
+                <label>单元数(沿宽) <input id="ac-b-units" type="number" step="1" min="1" value="4" /></label>
+                <label>旋转(度,顺时针,0北) <input id="ac-b-rotation" type="number" step="1" value="0" /></label>
+                <div class="ac-inline-buttons">
+                    <button id="ac-btn-start" data-ac="start" type="button">开始放置</button>
+                    <button id="ac-btn-cancel" data-ac="cancel" type="button">取消</button>
+                    <button id="ac-btn-delete" data-ac="delete" type="button">删除所选</button>
+                </div>
+                <small>点击列表或画布选择楼栋; 按住拖动移动; 删除仅对已选择楼栋生效。</small>
+            </div>
+            <div class="form-section">
+                <h4>楼栋列表</h4>
+                <div id="ac-building-list" class="small"></div>
+            </div>
+            <div class="form-section">
+                <h4>采光计算</h4>
+                <label>目标楼栋 <select id="ac-target-building"></select></label>
+                <label>楼层 <select id="ac-target-floor"></select></label>
+                <label>低太阳高度阈值(°) <input id="ac-low-alt-threshold" type="number" step="0.1" value="2" /></label>
+                <button id="ac-btn-calc" data-ac="calc" type="button">计算采光</button>
+                <div style="margin-top:4px; display:flex; flex-wrap:wrap; gap:4px;">
+                    <button id="ac-btn-all-table" type="button" style="font-size:0.65rem;">生成单元日照表</button>
+                    <button id="ac-btn-export-csv" type="button" style="font-size:0.65rem;">导出CSV</button>
+                    <button id="ac-btn-export-buildings" type="button" style="font-size:0.65rem;">导出楼栋JSON</button>
+                    <button id="ac-btn-import-buildings" type="button" style="font-size:0.65rem;">导入楼栋JSON</button>
+                    <button id="ac-btn-heatmap" type="button" style="font-size:0.65rem;">热力图OFF</button>
+                </div>
+                <input id="ac-file-import" type="file" accept="application/json" style="display:none;" />
+            </div>
+            <div class="form-section">
+                <h4>结果</h4>
+                <div id="ac-result" class="result-area"></div>
+            </div>
+            <div class="form-section">
+                <h4>单元日照表</h4>
+                <div id="ac-unit-table" style="max-height:180px; overflow:auto; border:1px solid #ccc; font-size:0.65rem; font-family:Consolas,monospace;"></div>
+            </div>
+            <div style="flex:1 1 auto"></div>
+        </GroupBox>
+    </div>
+    <div class="ac-main">
+        <div class="canvas-wrapper">
+            <div class="ac-toolbar">
+                <span class="ac-canvas-header">绘图区域 (上北下南) <span id="ac-coord"></span></span>
+                <div class="ac-view-buttons">
+                    <button type="button" id="ac-btn-view2d">2D</button>
+                    <button type="button" id="ac-btn-view3d">3D</button>
+                </div>
+            </div>
+            <canvas id="ac-canvas"></canvas>
+            <div id="ac-status" class="ac-status">提示: 2D:滚轮缩放/拖动楼栋; 3D: 左键拖动旋转, 滚轮缩放, 单击选单元(高亮)。</div>
+        </div>
+    </div>
+</div>
 
-    <GroupBox Title="结果" style="margin-top: 1.5rem;">
-    </GroupBox>
-</Row>
+<style>
+    .ac-layout { display:flex; gap:0; align-items:stretch; width:100%; min-height:calc(100vh - 40px); }
+    .ac-sidebar { flex:0 0 340px; width:340px; min-width:340px; padding-right:8px; box-sizing:border-box; overflow-y:auto; }
+    .ac-main { flex:1 1 auto; display:flex; flex-direction:column; min-width:0; }
+    .canvas-wrapper { flex:1 1 auto; display:flex; flex-direction:column; }
+    #ac-canvas { flex:1 1 auto; width:100%; height:100%; border:1px solid #999; background:#fff; touch-action:none; cursor:crosshair; }
+    .ac-toolbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; }
+    .ac-view-buttons button { font-size:0.7rem; padding:2px 6px; margin-left:4px; }
+    .ac-view-buttons button.ac-active { background:#0d6efd; color:#fff; }
+
+    .ac-canvas-header {
+        font-size: 0.85rem;
+        margin-bottom: 4px;
+        color: #555;
+    }
+
+    .form-section {
+        margin-bottom: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .form-section h4 {
+        margin: 0 0 4px 0;
+        font-size: 0.95rem;
+    }
+
+    .form-section label {
+        font-weight: 400;
+        font-size: 0.8rem;
+        display: flex;
+        justify-content: space-between;
+        gap: 6px;
+    }
+
+    .form-section input,
+    .form-section select {
+        width: 150px;
+        font-size: 0.8rem;
+    }
+
+    #ac-building-list div {
+        margin: 2px 0;
+    }
+
+    #ac-building-list .ac-selected {
+        background: #ffe0e0;
+        border-left: 3px solid #d22;
+        padding-left: 3px;
+    }
+
+    .small {
+        font-size: 0.7rem;
+        line-height: 1.1;
+    }
+
+    .result-area {
+        white-space: pre-wrap;
+        font-family: Consolas, monospace;
+        font-size: 0.75rem;
+        min-height: 80px;
+        border: 1px dashed #bbb;
+        padding: 4px;
+        background: #fafafa;
+    }
+
+    .ac-status {
+        font-size: 0.7rem;
+        color: #0a58ca;
+        margin-top: 4px;
+    }
+
+    .ac-inline-buttons {
+        display: flex;
+        gap: 6px;
+    }
+
+        @@media (max-width:1200px){
+            .ac-layout{ flex-direction:column; }
+            .ac-sidebar{ width:100%; max-height:320px; display:block; }
+            .ac-main{ min-height:60vh; }
+        }
+</style>
 
 @code {
-
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            try
+            {
+                await JS.InvokeAsync<IJSObjectReference>("import", "/js/advancedCalculator.js?v=20250824");
+                await JS.InvokeVoidAsync("AC.componentRendered");
+            }
+            catch { }
+        }
+    }
 }
