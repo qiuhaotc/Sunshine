@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{874427D3-E03A-4067-9453-E9E1EA5F6B9C}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		.github\workflows\dotnet-docker.yml = .github\workflows\dotnet-docker.yml
 		LICENSE = LICENSE
 		.github\workflows\main_housesunshine.yml = .github\workflows\main_housesunshine.yml
 		README.md = README.md
