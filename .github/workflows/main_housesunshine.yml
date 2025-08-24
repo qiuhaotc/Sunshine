@@ -28,7 +28,7 @@ jobs:
         run: dotnet build --configuration Release --no-restore
 
       - name: Publish
-        run: dotnet publish Sunshine.Server\Sunshine.Server.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp /p:EnvironmentName=Production --no-build
+        run: dotnet publish Sunshine.Server/Sunshine.Server.csproj -c Release --no-build -p:EnvironmentName=Production -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
