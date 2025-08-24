@@ -28,13 +28,13 @@ jobs:
         run: dotnet build --configuration Release --no-restore
 
       - name: Publish
-        run: dotnet publish Sunshine.Server/Sunshine.Server.csproj -c Release --no-build -p:EnvironmentName=Production -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish Sunshine.Server/Sunshine.Server.csproj -c Release --no-build -p:EnvironmentName=Production -o publish
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: published-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: publish
           if-no-files-found: error
 
   deploy:
