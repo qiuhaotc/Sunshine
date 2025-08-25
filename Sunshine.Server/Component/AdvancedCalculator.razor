@@ -163,7 +163,9 @@
         {
             try
             {
-                await JS.InvokeAsync<IJSObjectReference>("import", "/js/advancedCalculator.js?v="+ DateTime.Now.ToString("yyyyMMddHHmmsss"));
+                var file = new FileInfo("wwwroot/js/advancedCalculator.js");
+
+                await JS.InvokeAsync<IJSObjectReference>("import", "/js/advancedCalculator.js?v="+ file.LastWriteTimeUtc.ToString("yyyyMMddHHmmsss"));
                 await JS.InvokeVoidAsync("AC.componentRendered");
             }
             catch { }
