@@ -904,7 +904,14 @@
             for (let raw = 0; raw < units; raw++) {
               const a0 = raw / units,
                 a1 = (raw + 1) / units;
-              const unitIdx = units - raw; // 右=1
+              // 判断当前侧面 p00->p10 的世界坐标方向, 以确定右起(东侧=1)映射是否需翻转
+              let isReversed = false; // true 表示 p00->p10 指向西 (p00 是东侧), raw=0 即东=1
+              if (f.vertsWorld) {
+                const w0 = f.vertsWorld[0]; // bottom0
+                const w1 = f.vertsWorld[1]; // bottom1
+                if (w1.x < w0.x) isReversed = true; // x 增加代表向东
+              }
+              const unitIdx = isReversed ? raw + 1 : units - raw; // 右=1
               // 底边/顶边对应点
               const bb0 = lerp(p00, p10, a0),
                 bb1 = lerp(p00, p10, a1);
